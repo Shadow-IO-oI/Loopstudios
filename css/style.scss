@@ -1,0 +1,120 @@
+@use 'sass:math';
+
+@import 'base/mixins';
+
+@import "fonts/fonts";
+
+$fontFamily: 'Rg';
+$fontSize: rem(16); 
+
+$background: #0d1612;
+$text: #dae3e3;
+$primary: #c0d4ca;
+$secondary: #cabcd7;
+$accent: #d7cabc; 
+
+$mainColor: $text; 
+
+::-moz-selection {
+   background: rgba(215, 202, 188, 0.5);
+}
+
+::selection {
+   background: rgba(215, 202, 188, 0.5);
+}
+
+$minWidth: 320;
+$maxWidth: 1920;
+$maxWidthContainer: 1440;
+$containerPadding: 30;
+
+$containerWidth: $maxWidthContainer + $containerPadding;
+
+$pc: em($containerWidth);
+$tablet: em(991.98); 
+$mobile: em(767.98);
+$mobileSmall: em(479.98); 
+
+$responsiveType: 1;
+
+
+@import 'base/null';
+
+::-webkit-scrollbar{
+   visibility: hidden;
+}
+body {
+   background-color: $background;
+   overflow-x: hidden;
+   .lock & {
+      overflow: hidden;
+      touch-action: none;
+      overscroll-behavior: none;
+   }
+   .loaded & {
+   }
+}
+
+.wrapper {
+   min-height: 100%;
+   display: flex;
+   flex-direction: column;
+   overflow: hidden;
+   @supports (overflow: clip) {
+      overflow: clip;
+   }
+   > main {
+      flex: 1 1 auto;
+   }
+   > * {
+      min-width: 0;
+   }
+}
+@if ($responsiveType==1) {
+   [class*='__container'] {
+      @if ($maxWidthContainer>0) {
+         max-width: rem($containerWidth);
+         margin: 0 auto;
+      }
+      @if ($containerPadding>0) {
+         @if ($maxWidthContainer>0) {
+            padding: 0 rem(math.div($containerPadding, 2));
+         } @else {
+            @include adaptiveValue('padding-left', math.div($containerPadding, 2), 15);
+            @include adaptiveValue('padding-right', math.div($containerPadding, 2), 15);
+         }
+      }
+   }
+} @else {
+   [class*='__container'] {
+      margin: 0 auto;
+      @if ($maxWidthContainer>0) {
+         max-width: rem($containerWidth);
+      } @else {
+         @if ($containerPadding>0) {
+            padding: 0 rem(math.div($containerPadding, 2));
+         }
+      }
+      @media (max-width: $pc) {
+         max-width: rem(970);
+      }
+      @media (max-width: $tablet) {
+         max-width: rem(750);
+      }
+      @media (max-width: $mobile) {
+         max-width: none;
+         @if ($containerPadding>0 and $maxWidthContainer>0) {
+            padding: 0 rem(math.div($containerPadding, 2));
+         }
+      }
+   }
+}
+
+@import 'base';
+
+@import 'common';
+
+@import 'header';
+@import 'footer';
+
+@import 'home';
